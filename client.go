@@ -47,6 +47,14 @@ type SingleRequest struct {
 	ClickTrace     string
 }
 
+type BatchRequest struct {
+	AddressType   int `json:",int"`
+	TemplateName  string
+	ReceiversName string
+	TagName       string
+	ClickTrace    string
+}
+
 func NewClient(accessKeyId, accessKeySecret, accountName, fromAlias, regionId string) *client {
 	return &client{
 		accessKeyId:     accessKeyId,
@@ -85,7 +93,7 @@ func (c *client) request(method, link string, body io.Reader) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-func (c *client) SingleRequest(regionId string, req *SingleRequest) (map[string]interface{}, error) {
+func (c *client) SingleRequest(req *SingleRequest) (map[string]interface{}, error) {
 	params := c.NewRequest()
 	params.PutString("Action", "SingleSendMail")
 	params.PutString("AccountName", c.accountName)
@@ -107,6 +115,29 @@ func (c *client) SingleRequest(regionId string, req *SingleRequest) (map[string]
 	}
 	params.Sign("POST", c.accessKeySecret+"&")
 
+	buf, err := c.request("POST", regionMap[c.regionId], strings.NewReader(params.ToUrlValues().Encode()))
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[string]interface{})
+	err = json.Unmarshal(buf, &result)
+	return result, err
+}
+
+func (c *client) BatchSendEmail(req *BatchRequest) (map[string]interface{}, error) {
+	params := c.NewRequest()
+	params.PutString("Action", "BatchSendMail")
+	params.PutString("AccountName", c.accountName)
+	params.PutInt("AddressType", req.AddressType)
+	params.PutString("TemplateName", req.TemplateName)
+	params.PutString("ReceiversName", req.ReceiversName)
+	if req.TagName != "" {
+		params.PutString("TagName", req.TagName)
+	}
+	if req.ClickTrace != "" {
+		params.PutString("ClickTrace", req.ClickTrace)
+	}
+	params.Sign("POST", c.accessKeySecret+"&")
 	buf, err := c.request("POST", regionMap[c.regionId], strings.NewReader(params.ToUrlValues().Encode()))
 	if err != nil {
 		return nil, err
