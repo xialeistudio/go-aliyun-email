@@ -1,14 +1,14 @@
 package aliyun_email
 
 import (
+	"sort"
+	"strings"
 	"bytes"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/base64"
-	"net/url"
-	"sort"
 	"strconv"
-	"strings"
+	"net/url"
 )
 
 type Params map[string]interface{}
