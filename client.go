@@ -1,7 +1,7 @@
 package aliyun_email
 
 import (
-	"encoding/json"
+	"github.com/json-iterator/go"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -120,6 +120,7 @@ func (c *client) SingleRequest(req *SingleRequest) (map[string]interface{}, erro
 		return nil, err
 	}
 	result := make(map[string]interface{})
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = json.Unmarshal(buf, &result)
 	return result, err
 }
@@ -143,6 +144,7 @@ func (c *client) BatchSendEmail(req *BatchRequest) (map[string]interface{}, erro
 		return nil, err
 	}
 	result := make(map[string]interface{})
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = json.Unmarshal(buf, &result)
 	return result, err
 }
