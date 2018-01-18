@@ -1,13 +1,13 @@
 package aliyun_email
 
 import (
-	"time"
-	"github.com/satori/go.uuid"
-	"io"
-	"net/http"
-	"io/ioutil"
-	"strings"
 	"encoding/json"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
 )
 
 const (
@@ -73,7 +73,7 @@ func (c *client) NewRequest() *Params {
 	params.PutString("SignatureMethod", "HMAC-SHA1")
 	params.PutString("Timestamp", time.Now().UTC().Format("2006-01-02T15:04:05Z"))
 	params.PutString("SignatureVersion", "1.0")
-	params.PutString("SignatureNonce", uuid.NewV4().String())
+	params.PutString("SignatureNonce", strconv.FormatInt(time.Now().UnixNano(), 10))
 	params.PutString("RegionId", c.regionId)
 	return params
 }
