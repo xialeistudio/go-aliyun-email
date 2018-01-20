@@ -18,9 +18,9 @@ const (
 
 var (
 	regionMap = map[string]string{
-		RegionCNHangZhou:   "https://dm.aliyuncs.com",
-		RegionAPSouthEast1: "https://dm.ap-southeast-1.aliyuncs.com",
-		RegionAPSouthEast2: "https://dm.ap-southeast-2.aliyuncs.com",
+		RegionCNHangZhou:   "http://dm.aliyuncs.com",
+		RegionAPSouthEast1: "http://dm.ap-southeast-1.aliyuncs.com",
+		RegionAPSouthEast2: "http://dm.ap-southeast-2.aliyuncs.com",
 	}
 	versionMap = map[string]string{
 		RegionCNHangZhou:   "2015-11-23",
